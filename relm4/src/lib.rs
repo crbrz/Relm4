@@ -81,6 +81,8 @@ pub mod prelude;
 
 /// Re-export of gtk4
 pub use gtk;
+#[cfg(target_os = "windows")]
+pub use gdk4_win32;
 
 /// Re-export of relm4-css
 #[cfg(feature = "css")]
