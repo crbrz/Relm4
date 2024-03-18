@@ -43,6 +43,7 @@ pub mod binding;
 pub mod component;
 pub mod factory;
 pub mod loading_widgets;
+pub mod safe_settings_and_actions;
 pub mod shared_state;
 pub mod typed_view;
 
