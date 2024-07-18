@@ -67,9 +67,9 @@ pub trait SafeActionable: gtk::prelude::ActionableExt {
     ///
     /// [n]: gtk::prelude::ActionableExt::set_action_name
     /// [t]: gtk::prelude::ActionableExt::set_action_target_value
-    fn set_target_safe<'a, T: WithValue<'a>>(&self, _safety: T, target: T::Value)
+    fn set_target_safe<'a, T>(&self, _safety: T, target: T::Value)
     where
-        T: ActionSafety + NotDetailable,
+        T: ActionSafety + NotDetailable + WithValue<'a>,
     {
         self.set_action_name(Some(T::FULL_NAME));
         self.set_action_target_value(Some(&target.to_variant()))
@@ -117,9 +117,9 @@ pub trait RelmMenu: IsA<gio::Menu> {
     fn action<T: DetailableAction>(&self, safety: T, label: &str);
 
     /// Adds a menu item for an action safety with value and without variants.
-    fn target<'a, T: WithValue<'a>>(&self, safety: T, target: T::Value, label: &str)
+    fn target<'a, T>(&self, safety: T, target: T::Value, label: &str)
     where
-        T: ActionSafety + NotDetailable;
+        T: ActionSafety + NotDetailable + WithValue<'a>;
 
     /// Adds a menu item for a detailed action name.
     fn detailed(&self, action: &str, label: &str);
@@ -143,9 +143,9 @@ impl RelmMenu for gio::Menu {
         self.append_item(&item);
     }
 
-    fn target<'a, T: WithValue<'a>>(&self, _safety: T, target: T::Value, label: &str)
+    fn target<'a, T>(&self, _safety: T, target: T::Value, label: &str)
     where
-        T: ActionSafety,
+        T: ActionSafety + WithValue<'a>,
     {
         let item = gio::MenuItem::new(Some(label), None);
         item.set_action_and_target_value(Some(T::FULL_NAME), Some(&target.to_variant()));
